@@ -1,7 +1,7 @@
-import { router } from '~/router';
+import { router } from '@/router';
 router.addRoute('DefaultLayout', {
-  name: 'HomePage',
+  name: 'Homepage',
   path: '/',
   component: () => import('./view.vue'),
-  meta: { activePath: '/homepage' },
+  meta: { pathActive: '/homepage' },
 });

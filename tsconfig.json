@@ -18,8 +18,7 @@
     "typeRoots": ["./node_modules/@types"],
     "baseUrl": "./src",
     "paths": {
-      "@modules/*": ["rest/modules/*"],
-      "@services/*": ["services/*"]
+      "@/*": ["./*"]
     },
     "plugins": [{ "name": "@vuedx/typescript-plugin-vue" }]
   },

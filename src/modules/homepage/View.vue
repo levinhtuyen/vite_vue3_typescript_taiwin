@@ -1,11 +1,11 @@
-<script lang="ts"></script>
+<script setup lang="ts"></script>
 <template>
   <div class="w-full">
     <nav class="bg-white shadow-lg">
       <div class="md:flex items-center justify-between py-2 px-8 md:px-12">
         <div class="flex justify-between items-center">
           <div class="text-2xl font-bold text-gray-800 md:text-3xl">
-            <a href="#">Brand</a>
+            <a href="#">Brand 3</a>
           </div>
           <div class="md:hidden">
             <button
@@ -26,19 +26,19 @@
         </div>
         <div class="flex flex-col md:flex-row hidden md:block -mx-2">
           <a
-            href="#"
+            href="/"
             class="text-gray-800 rounded hover:bg-gray-900 hover:text-gray-100 hover:font-medium py-2 px-2 md:mx-2"
             >Home</a
           >
           <a
-            href="#"
+            href="/about"
             class="text-gray-800 rounded hover:bg-gray-900 hover:text-gray-100 hover:font-medium py-2 px-2 md:mx-2"
             >About</a
           >
           <a
-            href="#"
+            href="/login"
             class="text-gray-800 rounded hover:bg-gray-900 hover:text-gray-100 hover:font-medium py-2 px-2 md:mx-2"
-            >Contact</a
+            >Login</a
           >
         </div>
       </div>
@@ -87,4 +87,4 @@
     </div>
   </div>
 </template>
-<style></style>
+<style lang="scss" scoped></style>
