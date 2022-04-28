@@ -1,13 +1,56 @@
 <script setup lang="ts">
-  import { reactive } from 'vue'
+  import { ref, reactive } from 'vue'
+  import {
+    getAuth,
+    signInWithEmailAndPassword,
+    GoogleAuthProvider,
+    signInWithPopup,
+  } from 'firebase/auth'
+  import { useRouter } from 'vue-router'
+  import { error } from 'console'
+
   const dataLogin = reactive({
     email: '',
     password: '',
   })
+  const errMsg = ref()
+  const router = useRouter()
   const logIn = () => {
-    console.log('dataLogin :>> ', dataLogin)
+    signInWithEmailAndPassword(getAuth(), dataLogin.email, dataLogin.password)
+      .then((data) => {
+        console.log('success')
+        console.log('data :>> ', data)
+        router.push('/')
+      })
+      .catch((error) => {
+        console.log('error')
+        console.log('error :>> ', error)
+        switch (error.code) {
+          case 'auth/invalid-email':
+            errMsg.value = 'Invalid email'
+            break
+          case 'auth/user-not-found':
+            errMsg.value = 'No account with that email was round'
+            break
+          case 'auth/wrong-password':
+            errMsg.value = 'Incorrect password'
+            break
+          default:
+            errMsg.value = 'Email or password was incorred'
+            break
+        }
+      })
   }
-  console.log('111111111111111111111')
+  const signInGoogle = () => {
+    const provider = new GoogleAuthProvider()
+    signInWithPopup(getAuth(), provider)
+      .then((result) => {
+        router.push('/')
+      })
+      .catch((error) => {
+        console.log('error', error)
+      })
+  }
 </script>
 <template>
   <!-- component -->
@@ -25,8 +68,8 @@
         <h2 class="text-2xl font-semibold text-gray-700 text-center">Brand</h2>
         <p class="text-xl text-gray-600 text-center">Welcome back!</p>
         <a
-          href="#"
-          class="flex items-center justify-center mt-4 text-white rounded-lg shadow-md hover:bg-gray-100"
+          @click="signInGoogle()"
+          class="flex items-center justify-center mt-4 text-white rounded-lg shadow-md hover:bg-gray-100 cursor-pointer"
         >
           <div class="px-4 py-3">
             <svg class="h-6 w-6" viewBox="0 0 40 40">
@@ -59,10 +102,10 @@
           >
           <span class="border-b w-1/5 lg:w-1/4"></span>
         </div>
-        <div class="mt-4">
+        <div class="mt-4" v-if="errMsg">
           <label class="block text-gray-700 text-sm font-bold mb-2"
-            >Error</label
-          >
+            >{{ errMsg }}
+          </label>
         </div>
         <div class="mt-4">
           <label class="block text-gray-700 text-sm font-bold mb-2"
@@ -97,7 +140,9 @@
         </div>
         <div class="mt-4 flex items-center justify-between">
           <span class="border-b w-1/5 md:w-1/4"></span>
-          <a href="#" class="text-xs text-gray-500 uppercase">or sign up</a>
+          <a href="/register" class="text-xs text-gray-500 uppercase"
+            >or sign up</a
+          >
           <span class="border-b w-1/5 md:w-1/4"></span>
         </div>
       </div>
