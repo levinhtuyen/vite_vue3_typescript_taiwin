@@ -14,7 +14,7 @@
     "jsx": "preserve",
     "sourceMap": true,
     "lib": ["esnext", "dom", "dom.iterable", "scripthost"],
-    "types": ["node"],
+    "types": ["node", "element-plus/global"],
     "typeRoots": ["./node_modules/@types"],
     "baseUrl": "./src",
     "paths": {
