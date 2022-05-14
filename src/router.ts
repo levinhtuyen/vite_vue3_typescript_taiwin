@@ -3,6 +3,7 @@ import Homepage from '@/pages/homepage/View.vue'
 import About from '@/pages/about/View.vue'
 import Login from '@/pages/login/View.vue'
 import Register from '@/pages/register/view.vue'
+import Category from '@/pages/category/View.vue'
 import { createRouter, createWebHistory } from 'vue-router';
 const routes = [{
         path: "/",
@@ -25,6 +26,11 @@ const routes = [{
         path: "/register",
         name: "Register",
         component: Register,
+    },
+    {
+        path: "/category",
+        name: "Category",
+        component: Category,
     },
 
 ]
