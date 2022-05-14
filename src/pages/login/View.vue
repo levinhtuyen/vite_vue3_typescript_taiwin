@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { ElNotification } from 'element-plus'
   import { ref, reactive } from 'vue'
   import {
     getAuth,
@@ -9,6 +10,20 @@
   import { useRouter } from 'vue-router'
   import { error } from 'console'
 
+  const signInSuccess = () => {
+    ElNotification.success({
+      title: 'Success',
+      message: 'Đăng nhập thành công',
+      type: 'success',
+    })
+  }
+  const signInError = (message: string) => {
+    ElNotification({
+      title: 'Error',
+      message: `${message}`,
+      type: 'error',
+    })
+  }
   const dataLogin = reactive({
     email: '',
     password: '',
@@ -18,13 +33,10 @@
   const logIn = () => {
     signInWithEmailAndPassword(getAuth(), dataLogin.email, dataLogin.password)
       .then((data) => {
-        console.log('success')
-        console.log('data :>> ', data)
+        signInSuccess()
         router.push('/')
       })
       .catch((error) => {
-        console.log('error')
-        console.log('error :>> ', error)
         switch (error.code) {
           case 'auth/invalid-email':
             errMsg.value = 'Invalid email'
@@ -39,15 +51,19 @@
             errMsg.value = 'Email or password was incorred'
             break
         }
+        signInError(errMsg.value)
       })
   }
+
   const signInGoogle = () => {
     const provider = new GoogleAuthProvider()
     signInWithPopup(getAuth(), provider)
       .then((result) => {
-        router.push('/')
+        signInSuccess()
+        // router.push('/')
       })
       .catch((error) => {
+        signInError()
         console.log('error', error)
       })
   }
