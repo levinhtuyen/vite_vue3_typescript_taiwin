@@ -7,6 +7,7 @@
         </div>
         <div class="md:hidden">
           <button
+            @click="actionOpenCloseHeader"
             type="button"
             class="block text-gray-800 hover:text-gray-700 focus:text-gray-700 focus:outline-none"
           >
@@ -22,7 +23,10 @@
           </button>
         </div>
       </div>
-      <div class="flex flex-col md:flex-row hidden md:block -mx-2">
+      <div
+        class="flex flex-col md:flex-row md:block -mx-2"
+        :class="!isOpen ? 'hidden' : ''"
+      >
         <a
           href="/"
           class="text-gray-800 rounded hover:bg-gray-900 hover:text-gray-100 hover:font-medium py-2 px-2 md:mx-2"
@@ -49,54 +53,30 @@
           class="text-gray-800 rounded hover:bg-gray-900 hover:text-gray-100 hover:font-medium py-2 px-2 md:mx-2"
           >Sign out</a
         >
-        <header>
-          <div class="container mx-auto px-6 py-3">
-            <div class="flex items-center justify-between">
-              <div class="flex items-center justify-end w-full">
-                <button
-                  @click="actionOpenCloseCart"
-                  class="text-gray-600 focus:outline-none mx-4 sm:mx-0"
-                >
-                  <svg
-                    class="h-5 w-5"
-                    fill="none"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
-                    ></path>
-                  </svg>
-                </button>
-
-                <div class="flex sm:hidden">
-                  <button
-                    @click="actionOpenClose"
-                    type="button"
-                    class="text-gray-600 hover:text-gray-500 focus:outline-none focus:text-gray-500"
-                    aria-label="toggle menu"
-                  >
-                    <svg viewBox="0 0 24 24" class="h-6 w-6 fill-current">
-                      <path
-                        fill-rule="evenodd"
-                        d="M4 5h16a1 1 0 0 1 0 2H4a1 1 0 1 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2z"
-                      ></path>
-                    </svg>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </header>
+        <button
+          @click="actionOpenCloseHeaderCart"
+          class="text-gray-600 focus:outline-none mx-4 sm:mx-0"
+        >
+          <svg
+            class="h-5 w-5"
+            fill="none"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
+            ></path>
+          </svg>
+        </button>
       </div>
     </div>
   </nav>
   <div
     :class="cartOpen ? 'translate-x-0 ease-out' : 'translate-x-full ease-in'"
-    class="fixed right-0 top-0 max-w-xs w-full h-full px-6 py-4 transition duration-300 transform overflow-y-auto bg-white border-l-2 border-gray-300"
+    class="fixed right-0 top-0 max-w-xs w-full h-full px-6 py-4 transition duration-300 transform overflow-y-auto bg-white border-l-2 border-gray-300 z-50"
   >
     <div class="flex items-center justify-between">
       <h3 class="text-2xl font-medium text-gray-700">Your cart</h3>
@@ -118,7 +98,7 @@
       </button>
     </div>
     <hr class="my-3" />
-    <div class="flex justify-between mt-6">
+    <div class="flex justify-between mt-6 z-50">
       <div class="flex">
         <img
           class="h-20 w-20 object-cover rounded"
@@ -301,17 +281,24 @@
   import { getAuth, onAuthStateChanged, signOut } from '@firebase/auth'
   import { mapActions, storeToRefs } from 'pinia'
   import { useUserStore } from './../../store/useUser'
+  import { useStoreCategory } from './../../store/useStoreCategory'
+
   const main = useUserStore()
   const cartOpen = ref<boolean>(false)
   const isOpen = ref<boolean>(false)
-  const actionOpenCloseCart = () => {
+  const router = useRouter()
+  // action open close cart
+  const actionOpenCloseHeaderCart = () => {
     cartOpen.value = !cartOpen.value
   }
-  const actionOpenClose = () => {
+  const actionOpenCloseHeader = () => {
     isOpen.value = !isOpen.value
   }
+
   const { count, name } = storeToRefs(main)
-  const router = useRouter()
+  const storeCategory = useStoreCategory()
+  const { chooseProduct } = storeCategory
+  // check auth login
   const isLoggedIn = ref(false)
   let auth = ref()
   onMounted(() => {

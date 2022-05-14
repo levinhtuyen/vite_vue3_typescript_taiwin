@@ -29,7 +29,7 @@
       </div>
     </div>
     <div class="flex items-center justify-between my-4">
-      <p class="text-blue-500">All rights reserved</p>
+      <!-- <p class="text-blue-500">All rights reserved</p>
       <p class="inline-flex text-blue-500 px-2 pt-6">
         Built with
         <svg
@@ -92,7 +92,7 @@
             />
           </svg>
         </a>
-      </div>
+      </div> -->
     </div>
   </footer>
 </template>
