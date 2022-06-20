@@ -98,7 +98,61 @@
       </button>
     </div>
     <hr class="my-3" />
-    <div class="flex justify-between mt-6 z-50">
+    <div
+      class="flex justify-between mt-6"
+      v-for="(itemProduct, index) in cart"
+      :key="index"
+    >
+      <div class="flex">
+        <img
+          class="h-20 w-20 object-cover rounded"
+          src="https://images.unsplash.com/photo-1593642632823-8f785ba67e45?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1189&q=80"
+          alt=""
+        />
+        <div class="mx-3">
+          <h3 class="text-sm text-gray-600">{{ itemProduct.nameProduct }}</h3>
+          <div class="flex items-center mt-2">
+            <button
+              @click="countProduct(itemProduct)"
+              class="text-gray-500 focus:outline-none focus:text-gray-600"
+            >
+              <svg
+                class="h-5 w-5"
+                fill="none"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
+                ></path>
+              </svg>
+            </button>
+            <span class="text-gray-700 mx-2">{{ itemProduct.quality }}</span>
+            <button
+              @click="reductionProduct(itemProduct)"
+              class="text-gray-500 focus:outline-none focus:text-gray-600"
+            >
+              <svg
+                class="h-5 w-5"
+                fill="none"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+      <span class="text-gray-600">{{ itemProduct.price }}$</span>
+    </div>
+    <!-- <div class="flex justify-between mt-6">
       <div class="flex">
         <img
           class="h-20 w-20 object-cover rounded"
@@ -193,55 +247,7 @@
         </div>
       </div>
       <span class="text-gray-600">20$</span>
-    </div>
-    <div class="flex justify-between mt-6">
-      <div class="flex">
-        <img
-          class="h-20 w-20 object-cover rounded"
-          src="https://images.unsplash.com/photo-1593642632823-8f785ba67e45?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1189&q=80"
-          alt=""
-        />
-        <div class="mx-3">
-          <h3 class="text-sm text-gray-600">Mac Book Pro</h3>
-          <div class="flex items-center mt-2">
-            <button
-              class="text-gray-500 focus:outline-none focus:text-gray-600"
-            >
-              <svg
-                class="h-5 w-5"
-                fill="none"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
-                ></path>
-              </svg>
-            </button>
-            <span class="text-gray-700 mx-2">2</span>
-            <button
-              class="text-gray-500 focus:outline-none focus:text-gray-600"
-            >
-              <svg
-                class="h-5 w-5"
-                fill="none"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-              </svg>
-            </button>
-          </div>
-        </div>
-      </div>
-      <span class="text-gray-600">20$</span>
-    </div>
+    </div> -->
     <div class="mt-8">
       <form class="flex items-center justify-center">
         <input
@@ -276,12 +282,12 @@
 </template>
 
 <script setup lang="ts">
-  import { onMounted, ref } from 'vue'
+  import { watch, onMounted, ref } from 'vue'
   import { useRouter } from 'vue-router'
   import { getAuth, onAuthStateChanged, signOut } from '@firebase/auth'
   import { mapActions, storeToRefs } from 'pinia'
   import { useUserStore } from './../../store/useUser'
-  import { useStoreCategory } from './../../store/useStoreCategory'
+  import { useStoreCategory, IProduct } from './../../store/useStoreCategory'
 
   const main = useUserStore()
   const cartOpen = ref<boolean>(false)
@@ -294,10 +300,24 @@
   const actionOpenCloseHeader = () => {
     isOpen.value = !isOpen.value
   }
-
+  const iproduct = ref<IProduct>({
+    nameProduct: '12',
+    price: 20,
+    quality: 1,
+    sn: 1,
+  })
   const { count, name } = storeToRefs(main)
   const storeCategory = useStoreCategory()
-  const { chooseProduct } = storeCategory
+  const countProduct = (item: IProduct) => {
+    console.log('increaseProduct func')
+    storeCategory.increaseProduct(item)
+  }
+  const reductionProduct = (item: IProduct) => {
+    console.log('reductionProduct func')
+    storeCategory.reductionProduct(item)
+  }
+  let { cart } = storeToRefs(storeCategory)
+
   // check auth login
   const isLoggedIn = ref(false)
   let auth = ref()

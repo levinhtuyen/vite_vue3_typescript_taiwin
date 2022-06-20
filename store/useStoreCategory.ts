@@ -1,28 +1,50 @@
 import { defineStore } from 'pinia';
-export const useStoreCategory = defineStore('main', { 
-    state: () => ({
-        cart: [{
-            nameProduct: "Mac Book Pro",
-            price: 20,
-            quality: 2
-        },
+import { ref,watch } from 'vue'
+
+export interface IProduct {
+    nameProduct: string
+    price: number
+    quality: number
+    sn: number
+}
+const cartLocalStorage = ref(JSON.parse(localStorage.getItem('cart')))
+
+export const useStoreCategory = defineStore('storeProduct', () =>
+{
+    const cart = cartLocalStorage
+    function increaseProduct(item : IProduct)
+    {
+        if (!item)
         {
-            nameProduct: "Mac Book Air",
-            price: 18,
-            quality: 1
-        },
+            return
+        };
+        cart.value.map(product =>
         {
-            nameProduct: "Laptop Acer",
-            price: 15,
-            quality: 3
-        }]
-    }),
-    getters: {
-    },
-    actions: {
-        chooseProduct (product)
+            if (product.sn === item.sn)
+            {
+                product.quality++
+            }
+        })
+        localStorage.setItem('cart', JSON.stringify(cart.value))
+        return cart.value
+    };
+    function reductionProduct(item : IProduct)
+    {   
+        if (!item)
         {
-            this.cart = this.cart.push(product)
-        },
+            return
+        }
+        cart.value.map(product =>
+        {
+            if (product.sn === item.sn)
+            {
+                product.quality--
+            }
+        });
+        cart.value = cart.value.filter((item) => item.quality > 0)
+        localStorage.setItem('cart', JSON.stringify(cart.value))
+        return cart.value
     }
+    
+    return { cart, increaseProduct,reductionProduct }
 })
