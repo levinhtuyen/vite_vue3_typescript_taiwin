@@ -14,11 +14,12 @@
     "stag": "vue-tsc --noEmit --skipLibCheck && vite build --mode staging"
   },
   "dependencies": {
-    "@types/node": "^17.0.25",
+    "@types/node": "^17.0.36",
     "@vueuse/core": "^7.5.5",
     "axios": "^0.25.0",
     "element-plus": "^2.2.0",
     "firebase": "^9.6.11",
+    "module-alias": "^2.2.2",
     "pinia": "^2.0.13",
     "vue": "^3.2.6",
     "vue-i18n": "^9.2.0-beta.29",
