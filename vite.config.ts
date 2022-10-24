@@ -19,7 +19,7 @@ export default defineConfig({
       resolvers: [ElementPlusResolver()],
     }),
   ],
-  base: '/vite_vue3_typescript_taiwin_firebase_pinia/',
+
   resolve: {
     alias: {
       '~': resolve(__dirname, 'src'),
